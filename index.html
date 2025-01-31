@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Stroke Detector</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #output { margin-top: 20px; font-size: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Brain Stroke Identification</h1>
+    <input type="file" id="imageInput">
+    <button onclick="uploadImage()">Predict</button>
+    <p id="output"></p>
+
+    <script>
+        async function uploadImage() {
+            const fileInput = document.getElementById("imageInput");
+            if (!fileInput.files.length) {
+                alert("Please select an image.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            try {
+                const response = await fetch("YOUR_NGROK_URL/predict", {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await response.json();
+                document.getElementById("output").innerText = "Result: " + data.prediction;
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById("output").innerText = "Error in prediction.";
+            }
+        }
+    </script>
+</body>
+</html>
